@@ -4,7 +4,8 @@
 * @date 16/04/19
 * @param {string} categoryPath - The Cateogry path for Configuration Element.
 * @param {string} configElementName - The Name of Configuration Element.
-* @return {configElement} The configuration Element Object.
+* @param {string} attributeName - The name of the configuratoin element attribute.
+* @return {attribute.value} The configuration Element Attribute Value.
 */
 
 // Set Standard Logging
@@ -22,25 +23,22 @@ if (!categoryPath) {
 if (!configElementName) {
 	throw "The configuration element name must be provided.";
 }
-
-// get configElements
-var configElementCategory = Server.getConfigurationElementCategoryWithPath(categoryPath);
-var configElements = configElementCategory.allConfigurationElements;
-
-// Find configElement
-for each (i in configElements){
-	if (i.name == configElementName){
-		configElement = i;
-		break;
-	}
+if (!attributeName) {
+	throw "The configuration element attribute name must be provided.";
 }
 
+// get configElement
+var configElement = System.getModule("com.vodafone.agilecloud.library.util").getConfigElement(categoryPath, configElementName);  //change Path
+
+// Get Config Element Attribute
+var attribute = configElement.getAttributeWithKey(attributeName);
+
 // Error handling
-if (!configElement){
-	throw "Could not find Configuration Element with Name : " + configElementName;
+if (!attribute){
+	throw "Could not find Configuration Element Attribute with Name : " + attributeName;
 } else {
-	log.debug("Found Configuration Element : " + configElement.name);
+	log.debug("Found Configuration Element Attribute : " + attribute.name);
 }
 
 // return output
-return configElement;
+return attribute.value;
