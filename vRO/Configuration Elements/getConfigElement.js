@@ -43,4 +43,5 @@ if (!configElement){
 }
 
 // return output
-return configElement1;
+
+return configElement;
