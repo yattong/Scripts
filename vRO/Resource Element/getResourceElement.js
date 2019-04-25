@@ -1,4 +1,4 @@
-/* This action retuns the Resource Element
+/* This action returns the Resource Element
 * @Author Yattong Wu
 * @version 1.0.0
 * @date 16/04/19
@@ -7,14 +7,13 @@
 * @return {resourceElement} The Resource Element Object.
 */
 
-
 // Set Standard Logging
-var logType = "Action";
-var logName = "getResourceElement"; // This must be set to the name of the action
-var Logger = System.getModule("com.vodafone.agilecloud.library.util").logout(logType, logName);  //change Path
-var log = new Logger(logType, logName);
+var objType = "Action";
+var objName = "getResourceElement"; // This must be set to the name of the action
+var Logger = System.getModule("com.vodafone.agilecloud.library.util").logout(objType, objName);  //change Path
+var log = new Logger(objType, objName);
 // Start logging
-log.debug("------ Starting " + logName + " ------");
+log.debug("------ Starting " + objName + " ------");
 
 // check input params
 if (!categorypath) {

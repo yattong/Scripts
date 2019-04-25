@@ -53,7 +53,7 @@ function restCall(restHost, acceptType, contentType, headers){
 		
 		// Set headers
 		if (headers && headers.length > 0){
-			for (headerKey in headers.keys){
+			for each (headerKey in headers.keys){
 				var headerValue = headers.get(headerKey);
 				log.debug("REST Header: " + headerKey + ":" + headerValue);
 				request.setHeader(headerKey, headerValue);
@@ -86,7 +86,7 @@ function restCall(restHost, acceptType, contentType, headers){
 		
 		// Set headers
 		if (headers && headers.length > 0){
-			for (headerKey in headers.keys){
+			for each (headerKey in headers.keys){
 				var headerValue = headers.get(headerKey);
 				log.debug("REST Header: " + headerKey + ":" + headerValue);
 				request.setHeader(headerKey, headerValue);
@@ -119,7 +119,7 @@ function restCall(restHost, acceptType, contentType, headers){
 		
 		// Set headers
 		if (headers && headers.length > 0){
-			for (headerKey in headers.keys){
+			for each (headerKey in headers.keys){
 				var headerValue = headers.get(headerKey);
 				log.debug("REST Header: " + headerKey + ":" + headerValue);
 				request.setHeader(headerKey, headerValue);
@@ -151,7 +151,7 @@ function restCall(restHost, acceptType, contentType, headers){
 		
 		// Set headers
 		if (headers && headers.length > 0){
-			for (headerKey in headers.keys){
+			for each (headerKey in headers.keys){
 				var headerValue = headers.get(headerKey);
 				log.debug("REST Header: " + headerKey + ":" + headerValue);
 				request.setHeader(headerKey, headerValue);
@@ -183,7 +183,7 @@ function restCall(restHost, acceptType, contentType, headers){
 		
 		// Set headers
 		if (headers && headers.length > 0){
-			for (headerKey in headers.keys){
+			for each (headerKey in headers.keys){
 				var headerValue = headers.get(headerKey);
 				log.debug("REST Header: " + headerKey + " : " + headerValue);
 				request.setHeader(headerKey, headerValue);

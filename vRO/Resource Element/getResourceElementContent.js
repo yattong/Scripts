@@ -8,10 +8,10 @@
 */
 
 // Set Standard Logging
-var logType = "Action";
-var logName = "getResourceElementContent"; // This must be set to the name of the action
-var Logger = System.getModule("com.vodafone.agilecloud.library.util").logout(logType, logName);  //change Path
-var log = new Logger(logType, logName);
+var objType = "Action";
+var objName = "getResourceElementContent"; // This must be set to the name of the action
+var Logger = System.getModule("com.vodafone.agilecloud.library.util").logout(objType, objName);  //change Path
+var log = new Logger(objType, objName);
 // Start logging
 log.debug("------ Starting " + logName + " ------");
 
