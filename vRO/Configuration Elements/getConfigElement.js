@@ -4,7 +4,7 @@
 * @date 16/04/19
 * @param {string} categoryPath - The Cateogry path for Configuration Element.
 * @param {string} configElementName - The Name of Configuration Element.
-* @return {configurationElement} The configuration Element Object.
+* @return {attribute.value} The configuration Element Attribute Value.
 */
 
 // Set Standard Logging
