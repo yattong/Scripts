@@ -5,7 +5,7 @@
 * @param {string} categoryPath - The Cateogry path for Configuration Element.
 * @param {string} configElementName - The Name of Configuration Element.
 * @param {string} attributeName - The name of the configuratoin element attribute.
-* @param {any} objectType - The Type of object to create the configuration element attri
+* @param {any} objectType - The Type of object to create the configuration element attribute (arrays do not show up in client gui)
 */
 
 // Set Standard Logging
