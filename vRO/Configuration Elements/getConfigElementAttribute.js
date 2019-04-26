@@ -42,5 +42,3 @@ if (!attribute){
 
 // return output
 return attribute.value;
-
-// just to make some damn changes for sync
