@@ -12,7 +12,7 @@ if (!ipAddress){
 // Set Standard Logging
 var objType = "Action";
 var objName = "restCall"; // This must be set to the name of the action
-var Logger = System.getModule("com.vodafone.agilecloud.library.util").standardisedLogger(objType,objName);
+var Logger = System.getModule("london.clouding.logging").standardisedLogger(objType,objName);
 var log = new Logger(objType, objName);
 
 /** Variable declaration block */
