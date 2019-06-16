@@ -12,13 +12,14 @@
 * @return {Any} - The Rest Call Response.
 */
 
-// Set Variables
+// Set Standard Logging
 var objType = "Action";
 var objName = "restCall"; // This must be set to the name of the action
-var Logger = System.getModule("com.vodafone.agilecloud.library.util").standardisedLogger(objType,objName);
+var Logger = System.getModule("london.clouding.logging").standardisedLogger(objType,objName);
 var log = new Logger(objType, objName);
+
 // Start logging
-log.debug("------ Starting " + objName + " ------");
+log.debug("------ Starting " + objType + " : " + objName + " ------");
 
 // Create Object
 function restCall(restHost, acceptType, contentType, headers){

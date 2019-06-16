@@ -9,11 +9,12 @@
 
 // Set Standard Logging
 var objType = "Action";
-var objName = "getResourceElementContent"; // This must be set to the name of the action
-var Logger = System.getModule("com.vodafone.agilecloud.library.util").logout(objType, objName);  //change Path
+var objName = "restCall"; // This must be set to the name of the action
+var Logger = System.getModule("london.clouding.logging").standardisedLogger(objType,objName);
 var log = new Logger(objType, objName);
+
 // Start logging
-log.debug("------ Starting " + logName + " ------");
+log.debug("------ Starting " + objType + " : " + objName + " ------");
 
 // check input params
 if (!categorypath) {

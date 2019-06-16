@@ -8,12 +8,13 @@
 */
 
 // Set Standard Logging
-var objType = "Workflow";
-var objName = "getDynamicTypeObjectById"; // This must be set to the name of the action
-var Logger = System.getModule("com.vodafone.agilecloud.library.util").logout(objType, objName);  //change Path
+var objType = "Action";
+var objName = "restCall"; // This must be set to the name of the action
+var Logger = System.getModule("london.clouding.logging").standardisedLogger(objType,objName);
 var log = new Logger(objType, objName);
+
 // Start logging
-log.debug("------ Starting " + objName + " ------");
+log.debug("------ Starting " + objType + " : " + objName + " ------");
 
 // Execute retrieve items
 // Execute request

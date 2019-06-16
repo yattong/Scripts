@@ -13,11 +13,14 @@ if (!networkAddress || networkAddress.indexOf("/") == -1 || networkAddress.split
 	throw "Network address has not been provided, or been provided in the wrong format";
 }
 
-/** Variable declaration block */
-var logType = "Action";
-var logName = "isIPAddressInNetwork"; // This must be set to the name of the action
-var Logger = System.getModule("com.vodafone.agilecloud.library.util").standardisedLogger(logType, logName);
-var log = new Logger(logType, logName);
+// Set Standard Logging
+var objType = "Action";
+var objName = "restCall"; // This must be set to the name of the action
+var Logger = System.getModule("london.clouding.logging").standardisedLogger(objType,objName);
+var log = new Logger(objType, objName);
+
+// Start logging
+log.debug("------ Starting " + objType + " : " + objName + " ------");
 
 // figure out networkAddress first
 var cidr = parseInt(networkAddress.split("/")[1], 10);
