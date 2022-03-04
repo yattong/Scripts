@@ -6,7 +6,7 @@
 * @return {Any} The Logout object.
 */
 
-function Logout(objType, objName) {
+function Logout() {
 	this.type = objType; 
 	this.name = objName;
 	this.log = function (lMessage){		

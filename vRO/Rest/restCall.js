@@ -14,197 +14,111 @@
 
 // Set Standard Logging
 var objType = "Action";
-var objName = "restCall"; // This must be set to the name of the action
-var Logger = System.getModule("london.clouding.logging").standardisedLogger(objType,objName);
+var objName = "RestCall"; // This must be set to the name of the action
+var Logger = System.getModule("london.clouding.logging").standardisedLogger();
 var log = new Logger(objType, objName);
 
 // Start logging
 log.debug("------ Starting " + objType + " : " + objName + " ------");
 
 // Create Object
-function restCall(restHost, acceptType, contentType, headers){
+function RestCall(restHost, acceptType, contentType, headers){
 	// Set Rest Host
 	this.restHost = restHost;
-		
-	// Set default accept type
-	if (acceptType){
-		this.acceptType = acceptType;
-	} else {
-		this.acceptType = "application/json";
-	}
-	log.debug("REST Accept-Type: " + this.acceptType)
+  
+  // Set headers
+  function setHeaders(request,headers,debugMode){
+    for each (headerKey in headers.keys){
+      var headerValue = headers.get(headerKey);
+      if(debugMode == true) log.debug("REST Header: " + headerKey + ":" + headerValue);
+      request.setHeader(headerKey, headerValue);
+    }
+  }
 
-	// Set default content type
-	if (contentType){
-		this.contentType = contentType;
-	} else {
-		this.contentType = "application/json";
-	}
-	log.debug("REST Content-Type: " + this.contentType)
+  function logOut(fullUrl,method,content,contentType,acceptType){
+    log.debug("URL : "+fullUrl);
+    log.debug("REST Method : "+method);
+    log.debug("Accept Type : "+acceptType);
+    log.debug("Content Type : "+contentType);
+    content = (content.match(/password/i) ? JSON.stringify(JSON.parse(content)["password"] = "************") : content;
+    log.debug("Content : "+content);
+  }
+
+  function execute(request,throwOnError,debugMode){
+    var i=0;
+    var max=5;
+    var interval=(10*1000) // 10 seconds
+    var response;
+
+    do{
+      log.debug("Attempt "+(i+1)+" of "+max+" REST request execution...");
+      response = request.execute();
+      i++;
+      if(response == null || response >= 400) System.sleep(interval);
+    } while ((response == null || response >= 400) && i < max);
+
+    if(response == null || response == >= 400){
+      if(throwOnError == true){
+        log.error("REST Status Code : "+response.statusCode+"\nREST Response : "+response.ContentAsString);
+      } else {
+        log.warn("REST Status Code : "+response.statusCode);
+        log.warn("REST Response : "+response.ContentAsString);
+      }
+    }
+
+    if(debugMode == true){
+      log.debug("REST Status Code : "+response.statusCode);
+      log.debug("REST Response : "+response.ContentAsString);
+    }
+
+    return response;
+  }
 
 	// function
-	this.GET = function (restUri, throwOnError){
-		// Set up request
-		var request = this.restHost.createRequest("GET", restUri);
-		log.debug("REST URL: " + request.fullUrl);
+	this.GET = function (restUri,acceptType,headers,throwOnError,debugMode){
+    var request = this.restHost.createRequest("GET", restUri);
+    debugMode = (debugMode == null) ? true : false;
+    request.setHeader("Accept",acceptType);
+    if(headers.keys.length > 0) setHeaders(request,headers,debugMode);
+    if(debugMode == true) logOut(request.fullUrl,request.getMethod(),"","",acceptType);
+    return execute(request,throwOnError,debugMode);
+  }
+  
+  this.DELETE = function (restUri,acceptType,content,contentType,headers,throwOnError,debugMode){
+    var request = this.restHost.createRequest("DELETE", restUri);
+    debugMode = (debugMode == null) ? true : false;
+    request.setHeader("Accept",acceptType);
+    if(headers.keys.length > 0) setHeaders(request,headers,debugMode);
+    if(debugMode == true) logOut(request.fullUrl,request.getMethod(),content,contentType,acceptType);
+    return execute(request,throwOnError,debugMode);
+  }
 
-		// Set up request details
-		request.setHeader("Accept", this.acceptType);
-		request.contentType = this.contentType;
-		
-		// Set headers
-		if (headers && headers.length > 0){
-			for each (headerKey in headers.keys){
-				var headerValue = headers.get(headerKey);
-				log.debug("REST Header: " + headerKey + ":" + headerValue);
-				request.setHeader(headerKey, headerValue);
-			}
-		}
-		
-		// execute request
-		var response = request.execute();
-		log.debug("REST Response Code: " + response.statusCode);
+  this.PATCH = function (restUri,acceptType,content,contentType,headers,throwOnError,debugMode){
+    var request = this.restHost.createRequest("PATCH", restUri);
+    debugMode = (debugMode == null) ? true : false;
+    request.setHeader("Accept",acceptType);
+    if(headers.keys.length > 0) setHeaders(request,headers,debugMode);
+    if(debugMode == true) logOut(request.fullUrl,request.getMethod(),content,contentType,acceptType);
+    return execute(request,throwOnError,debugMode);
+  }
 
-		// Throw error
-		if (response.statusCode >= 400 && throwOnError == true){
-			errorMessage = "Error response code received from restCall : " + response.statusCode + "\n . \n" + response.ContentAsString;
-			throw errorMessage;
-		}
-		
-		// return response
-		log.debug("REST Response Content: " + response.ContentAsString);
-		return response;
-	}
-	this.POST = function (restUri, content, throwOnError){
-		// Set up request
-		var request = this.restHost.createRequest("POST", restUri, content);
-		log.debug("REST URL: " + request.fullUrl);
-		log.debug("REST Content: " + content);
-		
-		// Set up request details
-		request.setHeader("Accept", this.acceptType);
-		request.contentType = this.contentType;
-		
-		// Set headers
-		if (headers && headers.length > 0){
-			for each (headerKey in headers.keys){
-				var headerValue = headers.get(headerKey);
-				log.debug("REST Header: " + headerKey + ":" + headerValue);
-				request.setHeader(headerKey, headerValue);
-			}
-		}
+  this.PUT = function (restUri,acceptType,content,contentType,headers,throwOnError,debugMode){
+    var request = this.restHost.createRequest("PUT", restUri);
+    debugMode = (debugMode == null) ? true : false;
+    request.setHeader("Accept",acceptType);
+    if(headers.keys.length > 0) setHeaders(request,headers,debugMode);
+    if(debugMode == true) logOut(request.fullUrl,request.getMethod(),content,contentType,acceptType);
+    return execute(request,throwOnError,debugMode);
+  }
 
-		// execute request
-		var response = request.execute();
-		log.debug("REST Response Code: " + response.statusCode);
-
-		// Throw error
-		if (response.statusCode >= 400 && throwOnError == true){
-			errorMessage = "Error response code received from restCall : " + response.statusCode + "\n . \n" + response.ContentAsString;
-			throw errorMessage;
-		}
-		
-		// return response
-		log.debug("REST Response Content: " + response.ContentAsString);
-		return response;
-	}
-	this.PUT = function (restUri, content, throwOnError){
-		// Set up request
-		var request = this.restHost.createRequest("PUT", restUri, content);
-		log.debug("REST URL: " + request.fullUrl);
-		log.debug("REST Content: " + content);
-		
-		// Set up request details
-		request.setHeader("Accept", this.acceptType);
-		request.contentType = this.contentType;
-		
-		// Set headers
-		if (headers && headers.length > 0){
-			for each (headerKey in headers.keys){
-				var headerValue = headers.get(headerKey);
-				log.debug("REST Header: " + headerKey + ":" + headerValue);
-				request.setHeader(headerKey, headerValue);
-			}
-		}
-		
-		// execute request
-		var response = request.execute();
-		log.debug("REST Response Code: " + response.statusCode);
-
-		// Throw error
-		if (response.statusCode >= 400 && throwOnError == true){
-			errorMessage = "Error response code received from restCall : " + response.statusCode + "\n . \n" + response.ContentAsString;
-			throw errorMessage;
-		}
-		
-		// return response
-		log.debug("REST Response Content: " + response.ContentAsString);
-		return response;
-	}
-	this.DELETE = function (restUri, throwOnError){
-		var request = this.restHost.createRequest("DELETE", restUri);
-		log.debug("REST URL: " + request.fullUrl);
-		
-		// Set default accept type
-		// Set up request details
-		request.setHeader("Accept", this.acceptType);
-		request.contentType = this.contentType;
-		
-		// Set headers
-		if (headers && headers.length > 0){
-			for each (headerKey in headers.keys){
-				var headerValue = headers.get(headerKey);
-				log.debug("REST Header: " + headerKey + ":" + headerValue);
-				request.setHeader(headerKey, headerValue);
-			}
-		}
-		
-		// execute request
-		var response = request.execute();
-		log.debug("REST Response Code: " + response.statusCode);
-
-		// Throw error
-		if (response.statusCode >= 400 && throwOnError == true){
-			errorMessage = "Error response code received from restCall : " + response.statusCode + "\n . \n" + response.ContentAsString;
-			throw errorMessage;
-		}
-		
-		// return response
-		log.debug("REST Response Content: " + response.ContentAsString);
-		return response;
-	}
-	this.PATCH = function (restUri, content, throwOnError){
-		var request = this.restHost.createRequest("PATCH", restUri, content);
-		log.debug("REST URL: " + request.fullUrl);
-		log.debug("REST Content: " + content);
-		
-		// Set up request details
-		request.setHeader("Accept", this.acceptType);
-		request.contentType = this.contentType;
-		
-		// Set headers
-		if (headers && headers.length > 0){
-			for each (headerKey in headers.keys){
-				var headerValue = headers.get(headerKey);
-				log.debug("REST Header: " + headerKey + " : " + headerValue);
-				request.setHeader(headerKey, headerValue);
-			}
-		}
-
-		// execute request
-		var response = request.execute();
-		log.debug("REST Response Code: " + response.statusCode);
-
-		// Throw error
-		if (response.statusCode >= 400 && throwOnError == true){
-			errorMessage = "Error response code received from restCall : " + response.statusCode + "\n . \n" + response.ContentAsString;
-			throw errorMessage;
-		}
-		
-		// return response
-		log.debug("REST Response Content: " + response.ContentAsString);
-		return response;
-	}
+  this.POST = function (restUri,acceptType,content,contentType,headers,throwOnError,debugMode){
+    var request = this.restHost.createRequest("POST", restUri);
+    debugMode = (debugMode == null) ? true : false;
+    request.setHeader("Accept",acceptType);
+    if(headers.keys.length > 0) setHeaders(request,headers,debugMode);
+    if(debugMode == true) logOut(request.fullUrl,request.getMethod(),content,contentType,acceptType);
+    return execute(request,throwOnError,debugMode);
+  }
 }
 
-return restCall;
+return RestCall;
